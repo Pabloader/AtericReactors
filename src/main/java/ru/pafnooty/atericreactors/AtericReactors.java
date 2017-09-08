@@ -11,7 +11,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 public class AtericReactors {
 
     public static final String MODID = "atericReactors";
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "0.0.1";
 
     @SidedProxy(clientSide = "ru.pafnooty.atericreactors.ClientProxy", serverSide = "ru.pafnooty.atericreactors.ServerProxy")
     public static CommonProxy proxy;

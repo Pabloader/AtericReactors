@@ -2,6 +2,8 @@ package ru.pafnooty.atericreactors.items;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import ru.pafnooty.atericreactors.AtericReactors;
@@ -12,21 +14,74 @@ import ru.pafnooty.atericreactors.AtericReactors;
  */
 public final class AtericItems {
 
+    public static Item paw;
+    
     public static Item nyaton;
+    public static Item rawNyatonium;
     public static Item nyatoniumIngot;
+    
+    public static Item ateron;
+    public static Item rawAteronium;
+    public static Item ateroniumIngot;
 
     public static final void init() {
+        initItems();
+        initRecipes();
+    }
+
+    private static final void initItems() {
+        paw = new Item()
+                .setUnlocalizedName("paw")
+                .setCreativeTab(CreativeTabs.tabTools)
+                .setTextureName(AtericReactors.MODID + ":paw")
+                .setMaxStackSize(1);
+        GameRegistry.registerItem(paw, "paw");
+
         nyaton = new Item()
                 .setUnlocalizedName("nyaton")
                 .setCreativeTab(CreativeTabs.tabMaterials)
                 .setTextureName(AtericReactors.MODID + ":nyaton");
         GameRegistry.registerItem(nyaton, "nyaton");
+
+        rawNyatonium = new Item()
+                .setUnlocalizedName("rawNyatonium")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":rawNyatonium");
+        GameRegistry.registerItem(rawNyatonium, "rawNyatonium");
+
         nyatoniumIngot = new Item()
                 .setUnlocalizedName("nyatoniumIngot")
                 .setCreativeTab(CreativeTabs.tabMaterials)
                 .setTextureName(AtericReactors.MODID + ":nyatoniumIngot");
         GameRegistry.registerItem(nyatoniumIngot, "nyatoniumIngot");
-        GameRegistry.addSmelting(nyaton, new ItemStack(nyatoniumIngot), 1.0f);
+
+        ateron = new Item()
+                .setUnlocalizedName("ateron")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":ateron");
+        GameRegistry.registerItem(ateron, "ateron");
+
+        rawAteronium = new Item()
+                .setUnlocalizedName("rawAteronium")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":rawAteronium");
+        GameRegistry.registerItem(rawAteronium, "rawAteronium");
+
+        ateroniumIngot = new Item()
+                .setUnlocalizedName("ateroniumIngot")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":ateroniumIngot");
+        GameRegistry.registerItem(ateroniumIngot, "ateroniumIngot");
+
     }
 
+    private static final void initRecipes() {
+        GameRegistry.addRecipe(new ItemStack(paw), " # ", "# #", '#', Blocks.wool);
+        
+        GameRegistry.addRecipe(new ItemStack(rawNyatonium), "###", "###", "###", '#', nyaton);
+        GameRegistry.addSmelting(rawNyatonium, new ItemStack(nyatoniumIngot), 1.0f);
+        
+        GameRegistry.addRecipe(new ItemStack(rawAteronium), "###", "###", "###", '#', ateron);
+        GameRegistry.addSmelting(rawAteronium, new ItemStack(ateroniumIngot), 1.0f); 
+    }
 }
