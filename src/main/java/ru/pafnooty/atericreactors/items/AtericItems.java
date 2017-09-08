@@ -3,7 +3,6 @@ package ru.pafnooty.atericreactors.items;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import ru.pafnooty.atericreactors.AtericReactors;
@@ -29,7 +28,7 @@ public final class AtericItems {
         initRecipes();
     }
 
-    private static final void initItems() {
+    private static void initItems() {
         paw = new Item()
                 .setUnlocalizedName("paw")
                 .setCreativeTab(CreativeTabs.tabTools)
@@ -75,7 +74,7 @@ public final class AtericItems {
 
     }
 
-    private static final void initRecipes() {
+    private static void initRecipes() {
         GameRegistry.addRecipe(new ItemStack(paw), " # ", "# #", '#', Blocks.wool);
         
         GameRegistry.addRecipe(new ItemStack(rawNyatonium), "###", "###", "###", '#', nyaton);

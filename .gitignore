@@ -1,3 +1,7 @@
 .gradle
 eclipse
 nbproject
+.settings
+.classpath
+build.xml
+.project
