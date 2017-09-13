@@ -19,7 +19,7 @@ public abstract class TileMultiBlock extends TileEntity {
             if (hasMaster()) {
                 if (isMaster() && checkMultiBlockForm()) {
                     doMultiBlockStuff();
-                } else if(!isMaster() && !checkForMaster()) {
+                } else if (!isMaster() && !checkForMaster()) {
                     reset();
                 }
             } else if (checkMultiBlockForm()) {
@@ -64,6 +64,14 @@ public abstract class TileMultiBlock extends TileEntity {
     public boolean checkForMaster() {
         TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
         return (tile != null && (tile instanceof TileMultiBlock));
+    }
+
+    public TileMultiBlock getMaster() {
+        TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
+        if (tile != null && (tile instanceof TileMultiBlock)) {
+            return (TileMultiBlock) tile;
+        }
+        return null;
     }
 
     /**

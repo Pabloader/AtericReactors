@@ -25,14 +25,12 @@ public class BlockMultiBlock extends BlockContainer {
         if (tile != null && tile instanceof TileMultiBlock) {
             TileMultiBlock multiBlock = (TileMultiBlock) tile;
             if (multiBlock.hasMaster()) {
-                if (multiBlock.isMaster()) {
-                    if (!multiBlock.checkMultiBlockForm()) {
-                        multiBlock.resetStructure();
-                    }
+                TileMultiBlock master = multiBlock.getMaster();
+                if (master != null && !master.checkMultiBlockForm()) {
+                    master.resetStructure();
                 }
             }
         }
-        super.onNeighborBlockChange(world, x, y, z, block);
     }
 
     @Override

@@ -3,6 +3,7 @@ package ru.pafnooty.atericreactors.blocks.tileentity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import ru.pafnooty.atericreactors.blocks.BlockNyatonicAccelerator;
 
 /**
  *
@@ -10,11 +11,10 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileNyatonicAccelerator extends TileMultiBlock {
 
+    private boolean activated = false;
+
     @Override
     public void doMultiBlockStuff() {
-        if (worldObj.isAirBlock(xCoord + 1, yCoord, zCoord + 1)) {
-            worldObj.setBlock(xCoord + 1, yCoord, zCoord + 1, Blocks.fire);
-        }
     }
 
     @Override
@@ -50,6 +50,21 @@ public class TileNyatonicAccelerator extends TileMultiBlock {
                     acceleratorTile.setMasterCoords(xCoord, yCoord, zCoord);
                     acceleratorTile.setHasMaster(true);
                     acceleratorTile.setIsMaster(master);
+                    int metadata;
+                    if (master) {
+                        metadata = BlockNyatonicAccelerator.ICON_NW;
+                    } else if (x == xCoord + 2 && z == zCoord) {
+                        metadata = BlockNyatonicAccelerator.ICON_NE;
+                    } else if (x == xCoord && z == zCoord + 2) {
+                        metadata = BlockNyatonicAccelerator.ICON_SW;
+                    } else if (x == xCoord + 2 && z == zCoord + 2) {
+                        metadata = BlockNyatonicAccelerator.ICON_SE;
+                    } else if (z == zCoord + 1) {
+                        metadata = BlockNyatonicAccelerator.ICON_VERTICAL;
+                    } else {
+                        metadata = BlockNyatonicAccelerator.ICON_HORIZONTAL;
+                    }
+                    worldObj.setBlockMetadataWithNotify(x, yCoord, z, metadata, 2);
                 }
             }
         }
@@ -66,17 +81,30 @@ public class TileNyatonicAccelerator extends TileMultiBlock {
                 }
             }
         }
-        if (worldObj.isAirBlock(xCoord + 1, yCoord, zCoord + 1)) {
-            worldObj.setBlock(xCoord + 1, yCoord, zCoord + 1, Blocks.fire);
-        }
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
     }
 
     @Override
     public void masterWriteToNBT(NBTTagCompound tag) {
+        tag.setBoolean("Activated", activated);
     }
 
     @Override
     public void masterReadFromNBT(NBTTagCompound tag) {
+        activated = tag.getBoolean("Activated");
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
     }
 
 }

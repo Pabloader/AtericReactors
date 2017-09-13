@@ -4,6 +4,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemSimpleFoiled;
 import net.minecraft.item.ItemStack;
 import ru.pafnooty.atericreactors.AtericReactors;
 
@@ -18,10 +19,12 @@ public final class AtericItems {
     public static Item nyaton;
     public static Item rawNyatonium;
     public static Item nyatoniumIngot;
+    public static Item chargedNyatoniumIngot;
     
     public static Item ateron;
     public static Item rawAteronium;
     public static Item ateroniumIngot;
+    public static Item chargedAteroniumIngot;
 
     public static final void init() {
         initItems();
@@ -54,6 +57,12 @@ public final class AtericItems {
                 .setTextureName(AtericReactors.MODID + ":nyatoniumIngot");
         GameRegistry.registerItem(nyatoniumIngot, "nyatoniumIngot");
 
+        chargedNyatoniumIngot = new ItemSimpleFoiled()
+                .setUnlocalizedName("chargedNyatoniumIngot")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":nyatoniumIngot");
+        GameRegistry.registerItem(chargedNyatoniumIngot, "chargedNyatoniumIngot");
+
         ateron = new Item()
                 .setUnlocalizedName("ateron")
                 .setCreativeTab(CreativeTabs.tabMaterials)
@@ -71,6 +80,12 @@ public final class AtericItems {
                 .setCreativeTab(CreativeTabs.tabMaterials)
                 .setTextureName(AtericReactors.MODID + ":ateroniumIngot");
         GameRegistry.registerItem(ateroniumIngot, "ateroniumIngot");
+
+        chargedAteroniumIngot = new ItemSimpleFoiled()
+                .setUnlocalizedName("chargedAteroniumIngot")
+                .setCreativeTab(CreativeTabs.tabMaterials)
+                .setTextureName(AtericReactors.MODID + ":ateroniumIngot");
+        GameRegistry.registerItem(chargedAteroniumIngot, "chargedAteroniumIngot");
 
     }
 
