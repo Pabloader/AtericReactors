@@ -3,6 +3,7 @@ package ru.pafnooty.atericreactors.items;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSimpleFoiled;
 import net.minecraft.item.ItemStack;
@@ -92,10 +93,10 @@ public final class AtericItems {
     private static void initRecipes() {
         GameRegistry.addRecipe(new ItemStack(paw), " # ", "# #", '#', Blocks.wool);
         
-        GameRegistry.addRecipe(new ItemStack(rawNyatonium), "###", "###", "###", '#', nyaton);
+        GameRegistry.addRecipe(new ItemStack(rawNyatonium), "###", "#I#", "###", '#', nyaton, 'I', Items.iron_ingot);
         GameRegistry.addSmelting(rawNyatonium, new ItemStack(nyatoniumIngot), 1.0f);
         
-        GameRegistry.addRecipe(new ItemStack(rawAteronium), "###", "###", "###", '#', ateron);
+        GameRegistry.addRecipe(new ItemStack(rawAteronium), "###", "#I#", "###", '#', ateron, 'I', Items.iron_ingot);
         GameRegistry.addSmelting(rawAteronium, new ItemStack(ateroniumIngot), 1.0f); 
     }
 }

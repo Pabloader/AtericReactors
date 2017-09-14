@@ -132,7 +132,7 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
 
     @Override
     public int getSizeInventory() {
-        return 3; // input 0, nyaton fuel 1, output
+        return 3; 
     }
 
     @Override
