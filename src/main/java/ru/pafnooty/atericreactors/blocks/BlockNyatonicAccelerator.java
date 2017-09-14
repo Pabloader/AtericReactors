@@ -8,18 +8,23 @@ package ru.pafnooty.atericreactors.blocks;
 import java.util.ArrayList;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.pafnooty.atericreactors.AtericReactors;
 import ru.pafnooty.atericreactors.blocks.tileentity.TileNyatonicAccelerator;
+import ru.pafnooty.atericreactors.gui.AtericGuiHandler;
 
 /**
  *
  * @author pabloid
  */
 public class BlockNyatonicAccelerator extends BlockMultiBlock {
+
     public static final int ICON_BASE = 0;
     public static final int ICON_NW = 1;
     public static final int ICON_NE = 2;
@@ -34,6 +39,7 @@ public class BlockNyatonicAccelerator extends BlockMultiBlock {
         super(Material.rock);
         setBlockName("nyatonicAccelerator");
         setBlockTextureName(AtericReactors.MODID + ":nyatonicAccelerator");
+        setHardness(2.5f);
     }
 
     @Override
@@ -49,9 +55,13 @@ public class BlockNyatonicAccelerator extends BlockMultiBlock {
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        if(side == 0) return this.icons[ICON_BASE];
-        if(side != 1) return this.icons[ICON_HORIZONTAL];
-        
+        if (side == 0) {
+            return this.icons[ICON_BASE];
+        }
+        if (side != 1) {
+            return this.icons[ICON_HORIZONTAL];
+        }
+
         return this.icons[meta % icons.length];
     }
 
@@ -61,10 +71,17 @@ public class BlockNyatonicAccelerator extends BlockMultiBlock {
     }
 
     @Override
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> result = new ArrayList();
-        result.add(new ItemStack(AtericBlocks.nyatonicAccelerator));
-        return result;
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        if (!world.isRemote) {
+            TileEntity tile = world.getTileEntity(x, y, z);
+            if (tile != null && tile instanceof TileNyatonicAccelerator) {
+                TileNyatonicAccelerator acceleratorTile = (TileNyatonicAccelerator) tile;
+                if (!acceleratorTile.hasMaster()) {
+                    return false;
+                }
+            }
+            player.openGui(AtericReactors.instance, AtericGuiHandler.NYATONIC_ACCELERATOR_GUI, world, x, y, z);
+        }
+        return true;
     }
-
 }

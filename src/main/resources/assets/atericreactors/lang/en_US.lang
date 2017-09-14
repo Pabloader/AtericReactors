@@ -1,8 +1,11 @@
 item.paw.name=Paw
 item.nyaton.name=Nyaton
 item.rawNyatonium.name=Raw nyatonium
-item.nyatoniumIngot.name=Nyatonium Ingot
+item.nyatoniumIngot.name=Nyatonium ingot
+item.chargedNyatoniumIngot.name=Charged nyatonium ingot
 item.ateron.name=Ateron
 item.rawAteronium.name=Raw ateronium
-item.ateroniumIngot.name=Ateronium Ingot
+item.ateroniumIngot.name=Ateronium ingot
+item.chargedAteroniumIngot.name=Charged ateronium ingot
 tile.nyatonicAccelerator.name=Nyatonic accelerator
+container.atericreactors.nyatonic_accelerator=Nyatonic accelerator

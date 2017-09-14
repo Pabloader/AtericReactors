@@ -12,6 +12,9 @@ public class AtericReactors {
 
     public static final String MODID = "atericReactors";
     public static final String VERSION = "0.0.1";
+    
+    @Mod.Instance
+    public static AtericReactors instance = new AtericReactors();
 
     @SidedProxy(clientSide = "ru.pafnooty.atericreactors.ClientProxy", serverSide = "ru.pafnooty.atericreactors.ServerProxy")
     public static CommonProxy proxy;

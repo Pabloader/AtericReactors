@@ -67,6 +67,9 @@ public abstract class TileMultiBlock extends TileEntity {
     }
 
     public TileMultiBlock getMaster() {
+        if (!hasMaster) {
+            return null;
+        }
         TileEntity tile = worldObj.getTileEntity(masterX, masterY, masterZ);
         if (tile != null && (tile instanceof TileMultiBlock)) {
             return (TileMultiBlock) tile;
