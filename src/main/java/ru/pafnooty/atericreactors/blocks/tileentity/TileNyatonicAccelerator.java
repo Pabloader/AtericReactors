@@ -20,10 +20,88 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
 
+    public static final int TICKS_FOR_OPERATION = 100;
+
+    private boolean needSetupStructure = false;
+
+    private boolean fuelLoaded = false;
+    private int acceleratingTicks;
+
     private ItemStack[] inventory = new ItemStack[this.getSizeInventory()];
+
+    public boolean isFuelLoaded() {
+        return fuelLoaded;
+    }
+
+    public int getProgressScaled(int scale) {
+        return acceleratingTicks * scale / TICKS_FOR_OPERATION;
+    }
+
+    public int getAcceleratingTicks() {
+        return acceleratingTicks;
+    }
+
+    public void setAcceleratingTicks(int acceleratingTicks) {
+        this.acceleratingTicks = acceleratingTicks;
+    }
+
+    public void setFuelLoaded(boolean fuelLoaded) {
+        this.fuelLoaded = fuelLoaded;
+    }
 
     @Override
     public void doMultiBlockStuff() {
+        if (needSetupStructure) {
+            setupStructure();
+            needSetupStructure = false;
+        }
+
+        if (acceleratingTicks == 0 && !fuelLoaded && inventory[SLOT_FUEL] != null) {
+            fuelLoaded = true;
+            decrStackSize(SLOT_FUEL, 1);
+            markDirty();
+        }
+        if (fuelLoaded && canAccelerate()) {
+            acceleratingTicks++;
+            if (acceleratingTicks == TICKS_FOR_OPERATION) {
+                this.accelerateItem();
+                acceleratingTicks = 0;
+            }
+        }
+    }
+
+    private void accelerateItem() {
+        if (canAccelerate()) {
+            ItemStack result = getAccelerationResult(inventory[SLOT_INPUT]);
+            if (inventory[SLOT_OUTPUT] == null) {
+                inventory[SLOT_OUTPUT] = result.copy();
+            } else {
+                inventory[SLOT_OUTPUT].stackSize += result.stackSize;
+            }
+            decrStackSize(SLOT_INPUT, 1);
+            fuelLoaded = false;
+            markDirty();
+        }
+    }
+
+    private boolean canAccelerate() {
+        if (this.inventory[SLOT_INPUT] == null) {
+            return false;
+        } else {
+            ItemStack result = getAccelerationResult(this.inventory[SLOT_INPUT]);
+            if (result == null) {
+                return false;
+            }
+            if (this.inventory[SLOT_OUTPUT] == null) {
+                return true;
+            }
+            if (!this.inventory[SLOT_OUTPUT].isItemEqual(result)) {
+                return false;
+            }
+            int resultStackSize = this.inventory[SLOT_OUTPUT].stackSize + result.stackSize;
+            return resultStackSize <= getInventoryStackLimit()
+                    && resultStackSize <= this.inventory[SLOT_OUTPUT].getMaxStackSize();
+        }
     }
 
     @Override
@@ -82,6 +160,7 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
 
     @Override
     public void resetStructure() {
+        new Exception("Reset structure").printStackTrace();
         for (int i = 0; i < this.getSizeInventory(); i++) {
             ItemStack stack = this.getStackInSlot(i);
             if (stack != null) {
@@ -102,6 +181,7 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
     @Override
     public void reset() {
         super.reset();
+        new Exception("Reset").printStackTrace();
         worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
         this.inventory = new ItemStack[this.getSizeInventory()];
     }
@@ -118,6 +198,8 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
             }
         }
         tag.setTag("Items", list);
+        tag.setBoolean("FuelLoaded", fuelLoaded);
+        tag.setInteger("AcceleratingTicks", acceleratingTicks);
     }
 
     @Override
@@ -128,11 +210,14 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
             int slot = stackTag.getByte("Slot") & 255;
             this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
         }
+        fuelLoaded = tag.getBoolean("FuelLoaded");
+        acceleratingTicks = tag.getInteger("AcceleratingTicks");
+        needSetupStructure = true;
     }
 
     @Override
     public int getSizeInventory() {
-        return 3; 
+        return 3;
     }
 
     @Override
@@ -221,7 +306,20 @@ public class TileNyatonicAccelerator extends TileMultiBlock implements ISidedInv
     }
 
     public static boolean isAcceleratable(ItemStack stack) {
-        return stack.getItem() == AtericItems.nyatoniumIngot || stack.getItem() == AtericItems.ateroniumIngot;
+        return getAccelerationResult(stack) != null;
+    }
+
+    public static ItemStack getAccelerationResult(ItemStack stack) {
+        if (stack == null) {
+            return null;
+        }
+        if (stack.getItem() == AtericItems.nyatoniumIngot) {
+            return new ItemStack(AtericItems.chargedNyatoniumIngot);
+        }
+        if (stack.getItem() == AtericItems.ateroniumIngot) {
+            return new ItemStack(AtericItems.chargedAteroniumIngot);
+        }
+        return null;
     }
 
     @Override

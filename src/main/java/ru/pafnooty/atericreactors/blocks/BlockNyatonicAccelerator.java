@@ -5,14 +5,10 @@
  */
 package ru.pafnooty.atericreactors.blocks;
 
-import java.util.ArrayList;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import ru.pafnooty.atericreactors.AtericReactors;
@@ -79,8 +75,9 @@ public class BlockNyatonicAccelerator extends BlockMultiBlock {
                 if (!acceleratorTile.hasMaster()) {
                     return false;
                 }
+                player.openGui(AtericReactors.instance, AtericGuiHandler.NYATONIC_ACCELERATOR_GUI,
+                        world, acceleratorTile.getMasterX(), acceleratorTile.getMasterY(), acceleratorTile.getMasterZ());
             }
-            player.openGui(AtericReactors.instance, AtericGuiHandler.NYATONIC_ACCELERATOR_GUI, world, x, y, z);
         }
         return true;
     }

@@ -4,21 +4,21 @@ package ru.pafnooty.atericreactors.gui;
  *
  * @author pabloid
  */
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import ru.pafnooty.atericreactors.blocks.tileentity.TileNyatonicAccelerator;
-import ru.pafnooty.atericreactors.items.AtericItems;
 
 public class ContainerNyatonicAccelerator extends Container {
 
     private final TileNyatonicAccelerator tileAccelerator;
-    private int lastCookTime;
-    private int lastBurnTime;
-    private int lastItemBurnTime;
+    private boolean lastFuelLoaded;
+    private int lastAcceleratingTicks;
 
     public ContainerNyatonicAccelerator(InventoryPlayer inventory, TileNyatonicAccelerator accelerator) {
         this.tileAccelerator = accelerator;
@@ -92,5 +92,44 @@ public class ContainerNyatonicAccelerator extends Container {
         }
 
         return previous;
+    }
+
+    @Override
+    public void addCraftingToCrafters(ICrafting iCraft) {
+        super.addCraftingToCrafters(iCraft);
+        iCraft.sendProgressBarUpdate(this, 0, this.tileAccelerator.isFuelLoaded() ? 1 : 0);
+        iCraft.sendProgressBarUpdate(this, 1, this.tileAccelerator.getAcceleratingTicks());
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        for (int i = 0; i < this.crafters.size(); ++i) {
+            ICrafting icrafting = (ICrafting) this.crafters.get(i);
+
+            if (this.lastFuelLoaded != this.tileAccelerator.isFuelLoaded()) {
+                icrafting.sendProgressBarUpdate(this, 0, lastFuelLoaded ? 1 : 0);
+            }
+
+            if (this.lastAcceleratingTicks != this.tileAccelerator.getAcceleratingTicks()) {
+                icrafting.sendProgressBarUpdate(this, 1, this.tileAccelerator.getAcceleratingTicks());
+            }
+        }
+
+        this.lastFuelLoaded = this.tileAccelerator.isFuelLoaded();
+        this.lastAcceleratingTicks = this.tileAccelerator.getAcceleratingTicks();
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void updateProgressBar(int param, int value) {
+        if (param == 0) {
+            this.tileAccelerator.setFuelLoaded(value != 0);
+        }
+
+        if (param == 1) {
+            this.tileAccelerator.setAcceleratingTicks(value);
+        }
     }
 }
